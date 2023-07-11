@@ -8,7 +8,7 @@ PS2X ps2x; // create PS2 Controller Class object
 #define PS2_CLK 14 // SLK   18
 
 #define SERVO 3
-#define THU_BONG 4
+#define THU_BONG 12
 
 #define TOP_SPEED 4095
 #define NORM_SPEED 2048
@@ -24,7 +24,7 @@ void setupPS2controller()
   {
     err = ps2x.config_gamepad(PS2_CLK, PS2_CMD, PS2_SEL, PS2_DAT, true, true);
   }
-  ThuBong = false;
+  ThuBong = true;
 }
 
 bool PS2control()
@@ -42,10 +42,10 @@ bool PS2control()
     Serial.println("thay doi");
     if (ThuBong){
       ThuBong = false;
-      pwm.setPWM(THU_BONG, 0, 307.2);
+      pwm.setPWM(THU_BONG, 0, 0);
     } else{
       ThuBong = true;
-      pwm.setPWM(THU_BONG, 0, 409.6);
+      pwm.setPWM(THU_BONG, 0, 4095);
     }
   }
   if (ThuBong) {
