@@ -8,6 +8,7 @@ PS2X ps2x; // create PS2 Controller Class object
 #define PS2_CLK 14 // SLK   18
 
 #define SERVO 3
+#define THU_BONG 4
 
 #define TOP_SPEED 4095
 #define NORM_SPEED 2048
@@ -23,7 +24,7 @@ void setupPS2controller()
   {
     err = ps2x.config_gamepad(PS2_CLK, PS2_CMD, PS2_SEL, PS2_DAT, true, true);
   }
-  ThuBong = true;
+  ThuBong = false;
 }
 
 bool PS2control()
@@ -41,28 +42,13 @@ bool PS2control()
     Serial.println("thay doi");
     if (ThuBong){
       ThuBong = false;
-      pwm.setPWM(12, 0, 0);
+      pwm.setPWM(THU_BONG, 0, 307.2);
     } else{
       ThuBong = true;
-      pwm.setPWM(12, 0, 2048);
+      pwm.setPWM(THU_BONG, 0, 409.6);
     }
   }
-  if (!ThuBong) {
-    if (ps2x.Button(PSB_L1)) {
-      Serial.println("ban bong");
-      pwm.setPWM(14, 0, 4095);
-      delay(500);
-      while (ps2x.Button(PSB_L1)) {
-        pwm.setPWM(SERVO, 0, 400);
-        delay(500);
-        pwm.setPWM(SERVO, 0, 210);
-        ps2x.read_gamepad(0, 0);
-        delay(250);
-      }
-      pwm.setPWM(14, 0, 0);
-      pwm.setPWM(SERVO, 0, 400); 
-    }
-  } else {
+  if (ThuBong) {
   //thu bong
 
   // if (ps2x.Button(PSB_R2))
@@ -77,7 +63,8 @@ bool PS2control()
   int nMotMixL;                          // Motor (left) mixed output
   int nMotMixR;                          // Motor (right) mixed output
   nJoyX = pow(nJoyX,3)/16384;
-  nJoyY = pow(nJoyY,3)/16384;
+  // nJoyY = pow(nJoyY,3)/16384;
+  nJoyY = nJoyY * 1/2;
   Serial.println(nJoyX);
   Serial.println(nJoyY);
 
@@ -120,7 +107,22 @@ bool PS2control()
     c2 = map(c2, 0, 128, 0, speed);
   }
   setPWMMotors(c1, c2, c3, c4);
-  return 1;
+  } else {
+    if (ps2x.Button(PSB_L2)) {
+      Serial.println("ban bong");
+      pwm.setPWM(14, 0, 2048);
+      delay(500);
+      while (ps2x.Button(PSB_L2)) {
+        pwm.setPWM(SERVO, 0, 400);
+        delay(500);
+        pwm.setPWM(SERVO, 0, 210);
+        ps2x.read_gamepad(0, 0);
+        delay(250);
+      }
+      pwm.setPWM(14, 0, 0);
+      pwm.setPWM(SERVO, 0, 400); 
+    }
   }
+  return 1;
 }
 
