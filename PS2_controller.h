@@ -12,7 +12,7 @@ PS2X ps2x; // create PS2 Controller Class object
 
 #define TOP_SPEED 4095
 #define NORM_SPEED 2048
-#define TURNING_FACTOR 0.25
+#define TURNING_FACTOR 0.75
 
 int speed = NORM_SPEED;
 bool ThuBong;
@@ -38,15 +38,20 @@ bool PS2control()
   //   pwm.setPWM(2, 0, 0);
   //   pwm.setPWM(14, 0, 0);
   // }
-  if (ps2x.ButtonPressed(PSB_PAD_DOWN)){
-    Serial.println("thay doi");
-    if (ThuBong){
-      ThuBong = false;
-      pwm.setPWM(THU_BONG, 0, 0);
-    } else{
-      ThuBong = true;
-      pwm.setPWM(THU_BONG, 0, 4095);
-    }
+  if (ps2x.ButtonPressed(PSB_PAD_UP)){
+    Serial.println("ban");
+    ThuBong = false;
+    pwm.setPWM(THU_BONG, 0, 0);
+  } else
+  if (ps2x.ButtonPressed(PSB_PAD_LEFT)) {
+    Serial.println("Do");
+    ThuBong = true;
+    pwm.setPWM(THU_BONG, 0, 0);
+  } else
+  if (ps2x.ButtonPressed(PSB_PAD_DOWN)) {
+    Serial.println("Thu");
+    ThuBong = true;
+    pwm.setPWM(THU_BONG, 0, 4095);
   }
   if (ThuBong) {
   //thu bong
