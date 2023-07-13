@@ -10,7 +10,7 @@ PS2X ps2x; // create PS2 Controller Class object
 #define SERVO 3
 #define THU_BONG 12
 
-#define TOP_SPEED 4095
+#define TOP_SPEED 4090
 #define NORM_SPEED 2048
 #define TURNING_FACTOR 0.7
 
